@@ -1,0 +1,43 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <title>Extensions</title>
+  <link rel="stylesheet" href="/assets/base.css">
+</head>
+<body>
+  <div class="page">
+    <header class="page-head">
+      <h1>Extensions</h1>
+      <p class="lede">Load Chrome extensions from a folder, a <code>.zip</code>, or a <code>.crx</code>.</p>
+    </header>
+
+    <div class="toolbar-row">
+      <button id="add" class="primary">Add extension</button>
+      <button id="store">Open Chrome Web Store</button>
+      <span class="grow"></span>
+      <span class="muted" id="count"></span>
+    </div>
+
+    <div id="error-banner" class="card" hidden></div>
+
+    <div id="list"></div>
+
+    <div class="card">
+      <h3>How loading works</h3>
+      <p class="muted">
+        Extensions run in Chromium's own extension system. Store downloads arrive as
+        <code>.crx</code> files, which are unpacked here before loading. Manifest V2 and V3 both
+        load, though some newer APIs are not implemented by Electron — an extension that depends on
+        one will load but misbehave, so check its features after installing.
+      </p>
+      <p class="muted">
+        Extensions are off in private mode by default. Turn one on there only if you trust it with
+        that browsing, since it will see those pages.
+      </p>
+    </div>
+  </div>
+
+  <script type="module" src="/assets/extensions.js"></script>
+</body>
+</html>

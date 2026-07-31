@@ -1,0 +1,54 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <title>Video search</title>
+  <link rel="stylesheet" href="/assets/base.css">
+  <link rel="stylesheet" href="/assets/video.css">
+</head>
+<body>
+  <div class="video-page">
+    <header class="video-head">
+      <div class="video-head-inner">
+        <h1>Video</h1>
+        <form class="video-search" id="search-form">
+          <input id="query" type="search" placeholder="Search videos" autocomplete="off" spellcheck="false" autofocus>
+          <button class="primary" type="submit">Search</button>
+        </form>
+        <div class="size-control" role="group" aria-label="Tile size">
+          <button data-size="comfortable" title="Large tiles">▦</button>
+          <button data-size="huge" title="Extra large tiles">▣</button>
+          <button data-size="list" title="List view">☰</button>
+        </div>
+      </div>
+      <div class="video-meta" id="meta"></div>
+    </header>
+
+    <!-- Theater: the point of the page. A selected video plays at the full
+         width of the window instead of in a small embedded box. -->
+    <section class="theater" id="theater" hidden>
+      <div class="theater-frame">
+        <iframe id="player" allow="autoplay; encrypted-media; picture-in-picture; fullscreen"
+                allowfullscreen referrerpolicy="strict-origin-when-cross-origin"></iframe>
+      </div>
+      <div class="theater-info">
+        <h2 id="theater-title"></h2>
+        <div class="theater-sub">
+          <span id="theater-author"></span>
+          <span id="theater-stats" class="muted"></span>
+        </div>
+        <p id="theater-description" class="muted"></p>
+        <div class="theater-actions">
+          <button id="open-source">Open on source site</button>
+          <button id="copy-link">Copy link</button>
+          <button id="close-theater" class="ghost">Close player</button>
+        </div>
+      </div>
+    </section>
+
+    <main class="results" id="results"></main>
+  </div>
+
+  <script type="module" src="/assets/video.js"></script>
+</body>
+</html>

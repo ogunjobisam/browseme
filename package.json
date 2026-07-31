@@ -1,0 +1,24 @@
+{
+  "name": "browseme",
+  "version": "0.1.0",
+  "description": "A privacy-first Chromium browser: Chrome's UI, Brave's shields, a real incognito switch, and n8n-style automation built in.",
+  "main": "src/main/index.js",
+  "type": "commonjs",
+  "scripts": {
+    "start": "electron .",
+    "dev": "electron . --dev",
+    "test": "node --test \"test/**/*.test.js\"",
+    "lint": "node --check src/main/index.js"
+  },
+  "keywords": [
+    "browser",
+    "electron",
+    "adblock",
+    "privacy",
+    "automation"
+  ],
+  "license": "MIT",
+  "devDependencies": {
+    "electron": "^43.0.0"
+  }
+}
