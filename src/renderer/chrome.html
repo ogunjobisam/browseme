@@ -1,0 +1,93 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta http-equiv="Content-Security-Policy"
+        content="default-src 'none'; style-src 'self' 'unsafe-inline'; script-src 'self'; img-src 'self' data: https: http:; font-src 'self'">
+  <title>BrowseMe</title>
+  <link rel="stylesheet" href="chrome.css">
+</head>
+<body data-mode="normal">
+  <div id="titlebar-drag"></div>
+
+  <!-- Tab strip -->
+  <div class="tabstrip" id="tabstrip">
+    <div class="tabstrip-mode" id="mode-badge" hidden>
+      <span class="mode-dot"></span><span id="mode-label">Private</span>
+    </div>
+    <div class="tabs" id="tabs" role="tablist"></div>
+    <button class="tab-new" id="new-tab" title="New tab (Ctrl+T)" aria-label="New tab">+</button>
+    <div class="tabstrip-spacer"></div>
+    <div class="window-controls" id="window-controls">
+      <button data-window="minimize" aria-label="Minimize" title="Minimize"><svg viewBox="0 0 10 10"><path d="M0 5h10" /></svg></button>
+      <button data-window="maximize" aria-label="Maximize" title="Maximize"><svg viewBox="0 0 10 10"><rect x="0.5" y="0.5" width="9" height="9" /></svg></button>
+      <button data-window="close" class="close" aria-label="Close" title="Close"><svg viewBox="0 0 10 10"><path d="M0 0l10 10M10 0L0 10" /></svg></button>
+    </div>
+  </div>
+
+  <!-- Toolbar -->
+  <div class="toolbar">
+    <div class="nav-buttons">
+      <button id="back" title="Back (Alt+Left)" aria-label="Back" disabled>
+        <svg viewBox="0 0 24 24"><path d="M15 5l-7 7 7 7"/></svg>
+      </button>
+      <button id="forward" title="Forward (Alt+Right)" aria-label="Forward" disabled>
+        <svg viewBox="0 0 24 24"><path d="M9 5l7 7-7 7"/></svg>
+      </button>
+      <button id="reload" title="Reload (Ctrl+R)" aria-label="Reload">
+        <svg viewBox="0 0 24 24" class="icon-reload"><path d="M20 11a8 8 0 10-2.3 5.7M20 5v6h-6"/></svg>
+        <svg viewBox="0 0 24 24" class="icon-stop" hidden><path d="M6 6l12 12M18 6L6 18"/></svg>
+      </button>
+      <button id="home" title="Home" aria-label="Home">
+        <svg viewBox="0 0 24 24"><path d="M4 11l8-7 8 7v9a1 1 0 01-1 1h-4v-6H9v6H5a1 1 0 01-1-1z"/></svg>
+      </button>
+    </div>
+
+    <div class="omnibox" id="omnibox">
+      <button class="omnibox-shield" id="shield-button" title="Shields" aria-label="Shields">
+        <svg viewBox="0 0 24 24"><path d="M12 3l7 3v6c0 4.4-3 8.2-7 9-4-.8-7-4.6-7-9V6z"/></svg>
+        <span class="shield-count" id="shield-count" hidden>0</span>
+      </button>
+      <input id="address" type="text" spellcheck="false" autocomplete="off"
+             placeholder="Search or enter address" aria-label="Address and search bar">
+      <button class="omnibox-action" id="bookmark" title="Bookmark this page" aria-label="Bookmark">
+        <svg viewBox="0 0 24 24"><path d="M12 4l2.4 4.9 5.4.8-3.9 3.8.9 5.4-4.8-2.5-4.8 2.5.9-5.4L4.2 9.7l5.4-.8z"/></svg>
+      </button>
+    </div>
+
+    <div class="toolbar-actions">
+      <button id="video-search" title="Video search" aria-label="Video search">
+        <svg viewBox="0 0 24 24"><rect x="3" y="5" width="14" height="14" rx="2"/><path d="M17 10l4-3v10l-4-3z"/></svg>
+      </button>
+      <button id="flows-button" title="Flows — browser automation" aria-label="Flows">
+        <svg viewBox="0 0 24 24"><circle cx="6" cy="6" r="2.5"/><circle cx="18" cy="12" r="2.5"/><circle cx="6" cy="18" r="2.5"/><path d="M8.5 6H12a3 3 0 013 3v.5M8.5 18H12a3 3 0 003-3v-.5"/></svg>
+      </button>
+      <button id="extensions-button" title="Extensions" aria-label="Extensions">
+        <svg viewBox="0 0 24 24"><path d="M10 4a2 2 0 114 0v1h3a1 1 0 011 1v3h1a2 2 0 110 4h-1v3a1 1 0 01-1 1h-3v-1a2 2 0 10-4 0v1H6a1 1 0 01-1-1v-3H4a2 2 0 110-4h1V6a1 1 0 011-1h4z"/></svg>
+      </button>
+
+      <!-- The incognito switch: a mode toggle, not a second window -->
+      <button class="private-switch" id="private-switch" role="switch" aria-checked="false"
+              title="Private mode (Ctrl+Shift+N)">
+        <span class="switch-track"><span class="switch-thumb"></span></span>
+        <span class="switch-label">Private</span>
+      </button>
+
+      <button id="menu-button" title="Menu" aria-label="Menu">
+        <svg viewBox="0 0 24 24"><circle cx="12" cy="5" r="1.6"/><circle cx="12" cy="12" r="1.6"/><circle cx="12" cy="19" r="1.6"/></svg>
+      </button>
+    </div>
+  </div>
+
+  <!-- Find bar, shown over the top of the page area -->
+  <div class="findbar" id="findbar" hidden>
+    <input id="find-input" type="text" placeholder="Find in page" aria-label="Find in page">
+    <span class="find-count" id="find-count"></span>
+    <button id="find-prev" aria-label="Previous match">↑</button>
+    <button id="find-next" aria-label="Next match">↓</button>
+    <button id="find-close" aria-label="Close find bar">✕</button>
+  </div>
+
+  <script src="chrome.js" type="module"></script>
+</body>
+</html>

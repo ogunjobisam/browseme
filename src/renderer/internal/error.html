@@ -1,0 +1,27 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <title>Page not available</title>
+  <link rel="stylesheet" href="/assets/base.css">
+</head>
+<body>
+  <div class="page" style="max-width: 560px; padding-top: 16vh;">
+    <h1 id="headline">This page didn't load</h1>
+    <p class="muted" id="detail"></p>
+    <p class="mono muted truncate" id="target"></p>
+
+    <div style="display: flex; gap: 8px; margin-top: 22px;">
+      <button id="retry" class="primary">Try again</button>
+      <button id="back">Go back</button>
+    </div>
+
+    <div class="card" style="margin-top: 34px;">
+      <h3>Things worth checking</h3>
+      <ul class="muted" style="margin: 0; padding-left: 18px;" id="suggestions"></ul>
+    </div>
+  </div>
+
+  <script type="module" src="/assets/error.js"></script>
+</body>
+</html>

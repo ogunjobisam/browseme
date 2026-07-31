@@ -1,0 +1,68 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <title>Flows</title>
+  <link rel="stylesheet" href="/assets/base.css">
+  <link rel="stylesheet" href="/assets/flows.css">
+</head>
+<body>
+  <div class="flows-app">
+    <!-- Sidebar: saved flows, then the node palette -->
+    <aside class="sidebar">
+      <div class="sidebar-head">
+        <h1>Flows</h1>
+        <button id="new-flow" class="primary small">New</button>
+      </div>
+      <p class="sidebar-lede muted">Automate the browser: trigger on a page load, pull data out, act on it.</p>
+
+      <div class="flow-list" id="flow-list"></div>
+
+      <div class="palette" id="palette">
+        <h2>Nodes</h2>
+        <p class="muted palette-hint">Drag onto the canvas, or click to add.</p>
+        <div id="palette-groups"></div>
+      </div>
+    </aside>
+
+    <!-- Editor -->
+    <main class="editor">
+      <header class="editor-head">
+        <input id="flow-name" type="text" placeholder="Flow name" aria-label="Flow name">
+        <div class="editor-actions">
+          <button id="toggle-enabled" class="toggle" role="switch" aria-checked="true" aria-label="Enable flow"></button>
+          <span class="muted" id="enabled-label">Enabled</span>
+          <button id="run-flow" class="primary">Run</button>
+          <button id="save-flow">Save</button>
+          <button id="duplicate-flow" class="ghost small">Duplicate</button>
+          <button id="delete-flow" class="ghost small danger">Delete</button>
+        </div>
+      </header>
+
+      <div class="canvas-wrap" id="canvas-wrap">
+        <svg class="canvas-edges" id="edges"></svg>
+        <div class="canvas-nodes" id="nodes"></div>
+        <div class="canvas-empty" id="canvas-empty">
+          <p>Nothing here yet.</p>
+          <p class="muted">Add a trigger from the palette to start a flow.</p>
+        </div>
+      </div>
+
+      <footer class="run-log" id="run-log" hidden>
+        <div class="run-log-head">
+          <strong id="run-status">Run</strong>
+          <button id="close-log" class="ghost small">Hide</button>
+        </div>
+        <pre id="run-output"></pre>
+      </footer>
+    </main>
+
+    <!-- Inspector for the selected node -->
+    <aside class="inspector" id="inspector">
+      <div class="inspector-empty muted">Select a node to configure it.</div>
+    </aside>
+  </div>
+
+  <script type="module" src="/assets/flows.js"></script>
+</body>
+</html>

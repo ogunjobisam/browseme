@@ -1,0 +1,47 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <title>Shields</title>
+  <link rel="stylesheet" href="/assets/base.css">
+</head>
+<body>
+  <div class="page">
+    <header class="page-head">
+      <h1>Shields</h1>
+      <p class="lede">Ad and tracker blocking, applied to every site unless you say otherwise.</p>
+    </header>
+
+    <div class="stat-grid" id="stats"></div>
+
+    <h2>Defaults for every site</h2>
+    <div class="card" id="defaults"></div>
+
+    <h2>Filter lists</h2>
+    <div class="toolbar-row">
+      <button id="refresh" class="primary">Update lists now</button>
+      <span class="muted" id="refresh-status"></span>
+    </div>
+    <div class="card" id="lists"></div>
+
+    <h2>Your own rules</h2>
+    <div class="card">
+      <p class="muted">
+        One rule per line, in Adblock Plus syntax. <code>||tracker.example^</code> blocks a domain,
+        <code>example.com##.promo</code> hides an element, and <code>@@||example.com/needed.js</code>
+        makes an exception.
+      </p>
+      <textarea id="custom" spellcheck="false" placeholder="||ads.example.com^&#10;example.com##.sponsored"></textarea>
+      <div style="margin-top: 10px; display: flex; gap: 8px; align-items: center;">
+        <button id="save-custom" class="primary">Save rules</button>
+        <span class="muted" id="custom-status"></span>
+      </div>
+    </div>
+
+    <h2>Per-site exceptions</h2>
+    <div class="card" id="sites"></div>
+  </div>
+
+  <script type="module" src="/assets/shields.js"></script>
+</body>
+</html>

@@ -1,0 +1,36 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <title>New tab</title>
+  <link rel="stylesheet" href="/assets/base.css">
+  <link rel="stylesheet" href="/assets/newtab.css">
+</head>
+<body>
+  <main class="newtab">
+    <div class="brand">
+      <span class="brand-mark">◈</span>
+      <span class="brand-name">BrowseMe</span>
+    </div>
+
+    <form class="search" id="search-form">
+      <input id="q" type="search" placeholder="Search the web" autocomplete="off" spellcheck="false" autofocus
+             aria-label="Search the web">
+      <button type="submit" class="primary">Search</button>
+    </form>
+
+    <div class="quick-actions">
+      <button data-go="browseme://video"><span>▶</span> Video search</button>
+      <button data-go="browseme://flows"><span>⚙</span> Flows</button>
+      <button data-go="browseme://extensions"><span>🧩</span> Extensions</button>
+      <button data-go="browseme://shields"><span>🛡</span> Shields</button>
+    </div>
+
+    <section class="shortcuts" id="shortcuts" aria-label="Frequently visited"></section>
+
+    <section class="stats" id="stats"></section>
+  </main>
+
+  <script type="module" src="/assets/newtab.js"></script>
+</body>
+</html>

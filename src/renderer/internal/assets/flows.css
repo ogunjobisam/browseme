@@ -1,0 +1,256 @@
+/*
+ * Flows editor — a three-pane node graph: saved flows and palette on the
+ * left, an infinite canvas in the middle, the selected node's parameters on
+ * the right.
+ */
+
+html, body { height: 100%; overflow: hidden; }
+
+.flows-app {
+  display: grid;
+  grid-template-columns: 260px 1fr 300px;
+  height: 100vh;
+  background: var(--bg-sunken);
+}
+
+/* --------------------------------------------------------------- sidebar */
+
+.sidebar {
+  display: flex;
+  flex-direction: column;
+  background: var(--bg);
+  border-right: 1px solid var(--border);
+  overflow-y: auto;
+}
+
+.sidebar-head {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 18px 16px 6px;
+}
+.sidebar-head h1 { font-size: 18px; margin: 0; }
+.sidebar-lede { padding: 0 16px; font-size: 12.5px; margin-bottom: 12px; }
+
+.flow-list { padding: 0 8px 12px; border-bottom: 1px solid var(--border); }
+
+.flow-item {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  padding: 8px 10px;
+  border-radius: 8px;
+  cursor: pointer;
+  font-size: 13px;
+}
+.flow-item:hover { background: var(--bg-soft); }
+.flow-item.active { background: var(--accent-soft); color: var(--accent); font-weight: 600; }
+.flow-item .name { flex: 1 1 auto; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+.flow-item .dot { width: 7px; height: 7px; border-radius: 50%; background: var(--border); flex: 0 0 7px; }
+.flow-item .dot.on { background: var(--success); }
+
+/* --------------------------------------------------------------- palette */
+
+.palette { padding: 14px 16px 40px; }
+.palette h2 { margin: 0 0 2px; font-size: 13px; text-transform: uppercase; letter-spacing: 0.05em; color: var(--text-dim); }
+.palette-hint { font-size: 12px; margin-bottom: 12px; }
+
+.palette-group { margin-bottom: 16px; }
+.palette-group h3 {
+  font-size: 11px;
+  text-transform: uppercase;
+  letter-spacing: 0.06em;
+  color: var(--text-dim);
+  margin: 0 0 6px;
+}
+
+.palette-node {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  padding: 7px 9px;
+  margin-bottom: 4px;
+  border: 1px solid var(--border);
+  border-radius: 8px;
+  background: var(--card);
+  cursor: grab;
+  font-size: 12.5px;
+}
+.palette-node:hover { border-color: var(--accent); }
+.palette-node .icon { flex: 0 0 18px; text-align: center; }
+
+/* ---------------------------------------------------------------- editor */
+
+.editor { display: flex; flex-direction: column; min-width: 0; }
+
+.editor-head {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  padding: 12px 18px;
+  background: var(--bg);
+  border-bottom: 1px solid var(--border);
+}
+#flow-name { flex: 1 1 auto; max-width: 340px; font-weight: 600; }
+.editor-actions { display: flex; align-items: center; gap: 8px; margin-left: auto; }
+.editor-actions .danger { color: var(--danger); }
+
+.canvas-wrap {
+  position: relative;
+  flex: 1 1 auto;
+  overflow: hidden;
+  background-color: var(--bg-sunken);
+  background-image: radial-gradient(circle, var(--border) 1px, transparent 1px);
+  background-size: 22px 22px;
+  cursor: grab;
+}
+.canvas-wrap.panning { cursor: grabbing; }
+
+.canvas-edges, .canvas-nodes {
+  position: absolute;
+  top: 0; left: 0;
+  width: 100%; height: 100%;
+  transform-origin: 0 0;
+}
+.canvas-edges { pointer-events: none; overflow: visible; }
+.canvas-nodes { pointer-events: none; }
+
+.edge { fill: none; stroke: var(--text-dim); stroke-width: 2; opacity: 0.7; pointer-events: stroke; cursor: pointer; }
+.edge:hover { stroke: var(--danger); opacity: 1; stroke-width: 3; }
+.edge.pending { stroke: var(--accent); stroke-dasharray: 5 4; }
+.edge-hit { fill: none; stroke: transparent; stroke-width: 14; pointer-events: stroke; cursor: pointer; }
+
+.canvas-empty {
+  position: absolute;
+  inset: 0;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  text-align: center;
+  pointer-events: none;
+}
+
+/* ----------------------------------------------------------------- nodes */
+
+.node {
+  position: absolute;
+  width: 190px;
+  pointer-events: auto;
+  background: var(--card);
+  border: 1px solid var(--border);
+  border-radius: 10px;
+  box-shadow: var(--shadow);
+  cursor: grab;
+  user-select: none;
+}
+.node.selected { border-color: var(--accent); box-shadow: 0 0 0 3px var(--accent-soft), var(--shadow); }
+.node.running { border-color: var(--accent); animation: pulse 1s ease-in-out infinite; }
+.node.ok { border-color: var(--success); }
+.node.failed { border-color: var(--danger); }
+.node.skipped { opacity: 0.55; }
+
+@keyframes pulse { 50% { box-shadow: 0 0 0 6px var(--accent-soft); } }
+
+.node-head {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  padding: 9px 11px;
+  border-bottom: 1px solid var(--border);
+  font-size: 12.5px;
+  font-weight: 600;
+}
+.node-head .icon { flex: 0 0 16px; text-align: center; }
+.node[data-category="trigger"] .node-head { color: var(--shield); }
+.node[data-category="browser"] .node-head { color: var(--accent); }
+
+.node-body {
+  padding: 8px 11px;
+  font-size: 11.5px;
+  color: var(--text-dim);
+  min-height: 30px;
+  word-break: break-word;
+}
+.node-result { padding: 0 11px 8px; font-size: 11px; color: var(--text-dim); }
+.node-result b { color: var(--text); }
+
+.port {
+  position: absolute;
+  width: 13px; height: 13px;
+  border-radius: 50%;
+  background: var(--bg);
+  border: 2px solid var(--text-dim);
+  cursor: crosshair;
+}
+.port:hover, .port.target { border-color: var(--accent); background: var(--accent); }
+.port.in { left: -7px; top: 22px; }
+.port.out { right: -7px; }
+.port-label {
+  position: absolute;
+  right: 14px;
+  font-size: 9.5px;
+  color: var(--text-dim);
+  text-transform: uppercase;
+  letter-spacing: 0.04em;
+}
+
+/* -------------------------------------------------------------- run log */
+
+.run-log {
+  border-top: 1px solid var(--border);
+  background: var(--bg);
+  max-height: 230px;
+  display: flex;
+  flex-direction: column;
+}
+.run-log-head {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 8px 16px;
+  border-bottom: 1px solid var(--border);
+  font-size: 12.5px;
+}
+.run-log-head strong.ok { color: var(--success); }
+.run-log-head strong.failed { color: var(--danger); }
+#run-output {
+  margin: 0;
+  padding: 10px 16px 16px;
+  overflow: auto;
+  font-family: ui-monospace, SFMono-Regular, Menlo, monospace;
+  font-size: 11.5px;
+  line-height: 1.6;
+  white-space: pre-wrap;
+}
+
+/* ------------------------------------------------------------ inspector */
+
+.inspector {
+  background: var(--bg);
+  border-left: 1px solid var(--border);
+  overflow-y: auto;
+  padding: 18px 16px 40px;
+}
+.inspector-empty { padding-top: 40px; text-align: center; font-size: 12.5px; }
+.inspector h2 { margin: 0 0 2px; font-size: 15px; }
+.inspector .node-type { color: var(--text-dim); font-size: 11.5px; margin-bottom: 16px; }
+.inspector .field { margin-bottom: 14px; }
+.inspector .field .hint { font-size: 11.5px; color: var(--text-dim); margin-top: 4px; }
+.inspector .checkbox { display: flex; align-items: center; gap: 8px; }
+.inspector .checkbox input { width: auto; }
+.inspector .delete-node { width: 100%; margin-top: 8px; color: var(--danger); }
+
+.template-help {
+  margin-top: 20px;
+  padding: 10px 12px;
+  border-radius: 8px;
+  background: var(--bg-soft);
+  font-size: 11.5px;
+  color: var(--text-dim);
+}
+.template-help code { font-family: ui-monospace, monospace; color: var(--text); }
+
+@media (max-width: 1100px) {
+  .flows-app { grid-template-columns: 220px 1fr 260px; }
+}

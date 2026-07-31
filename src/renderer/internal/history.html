@@ -1,0 +1,31 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <title>History</title>
+  <link rel="stylesheet" href="/assets/base.css">
+</head>
+<body>
+  <div class="page">
+    <header class="page-head">
+      <h1>History</h1>
+      <p class="lede">Normal browsing only — private mode is never recorded here.</p>
+    </header>
+
+    <div class="toolbar-row">
+      <input id="search" class="grow" type="search" placeholder="Search history" autocomplete="off">
+      <select id="range" style="width: auto;">
+        <option value="all">Everything</option>
+        <option value="hour">Last hour</option>
+        <option value="day">Last 24 hours</option>
+        <option value="week">Last week</option>
+      </select>
+      <button id="clear" class="danger">Clear</button>
+    </div>
+
+    <div id="list"></div>
+  </div>
+
+  <script type="module" src="/assets/history.js"></script>
+</body>
+</html>
